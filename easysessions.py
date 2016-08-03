@@ -1,4 +1,3 @@
-from bottle import run, route, request, response
 import random
 
 sesje = {}
@@ -16,32 +15,9 @@ def session_start(username):
     response.set_cookie('sesja', session_number, secret=32167, path='/')
 
 def session_end():
-    session_number = request.get_cookie('sesja', secret=32167)
-    sesje.pop(session_number)
-    response.delete_cookie('sesja')
-
-@route('/')
-def index():
-    if session_check():
-        imie = session_check()
-        return imie
-    else:
-        return ':0'
-
-@route('/login/<imie>')
-def login(imie):
-    session_start(imie)
-    return 'ok %s, sesja trwa' % imie
-
-@route('/logout')
-def logout():
     try:
-        session_end()
-        return 'wylogowano'
+        session_number = request.get_cookie('sesja', secret=32167)
+        sesje.pop(session_number)
+        response.delete_cookie('sesja')
     except:
-        return 'nie jestes zalogowany'
-
-
-
-run(debug=True)
-
+        pass
